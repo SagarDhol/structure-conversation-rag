@@ -1,0 +1,78 @@
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--bg-primary);
+}
+
+.nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--surface-1);
+    border-bottom: 1px solid var(--border-light);
+    padding: 0 var(--spacing-md);
+}
+
+.navContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 60px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.logoIcon {
+    font-size: 1.5rem;
+}
+
+.logoText {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.navLinks {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.navLink {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.navLink:hover {
+    color: var(--text-primary);
+    background-color: var(--surface-2);
+    text-decoration: none;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    .navContent {
+        padding: 0;
+    }
+
+    .logoText {
+        display: none;
+    }
+}

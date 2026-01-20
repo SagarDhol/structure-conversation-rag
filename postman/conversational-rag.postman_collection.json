@@ -1,0 +1,329 @@
+{
+  "info": {
+    "name": "Conversational RAG API",
+    "description": "Production-ready Retrieval Augmented Generation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "sessionId",
+      "value": "test-session-001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health & Info",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Check API health status"
+          }
+        },
+        {
+          "name": "Root Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Get API information"
+          }
+        },
+        {
+          "name": "Get Model Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/model",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "model"]
+            },
+            "description": "Get current model configuration"
+          }
+        },
+        {
+          "name": "Validate Model",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provider\": \"openai\",\n  \"model\": \"gpt-4\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/model/validate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "model", "validate"]
+            },
+            "description": "Validate provider/model combination"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "/path/to/your/document.pdf"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/ingest",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ingest"]
+            },
+            "description": "Upload and ingest a document (PDF, TXT, or DOCX)"
+          }
+        },
+        {
+          "name": "List Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents"]
+            },
+            "description": "List all ingested documents"
+          }
+        },
+        {
+          "name": "Get Document",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/:documentId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", ":documentId"],
+              "variable": [
+                {
+                  "key": "documentId",
+                  "value": "doc_xxxxx"
+                }
+              ]
+            },
+            "description": "Get metadata for a specific document"
+          }
+        },
+        {
+          "name": "Delete Document",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/:documentId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", ":documentId"],
+              "variable": [
+                {
+                  "key": "documentId",
+                  "value": "doc_xxxxx"
+                }
+              ]
+            },
+            "description": "Delete a document from the vector store"
+          }
+        },
+        {
+          "name": "Delete All Documents",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents"]
+            },
+            "description": "Delete all documents (use with caution)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat",
+      "item": [
+        {
+          "name": "Chat (Streaming)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What is in the uploaded documents?\",\n  \"session_id\": \"{{sessionId}}\",\n  \"provider\": \"openai\",\n  \"model\": \"gpt-4\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chat"]
+            },
+            "description": "Send a chat message with streaming SSE response"
+          }
+        },
+        {
+          "name": "Chat (Non-Streaming)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What is in the uploaded documents?\",\n  \"session_id\": \"{{sessionId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/chat/sync",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chat", "sync"]
+            },
+            "description": "Send a chat message with non-streaming response"
+          }
+        },
+        {
+          "name": "Follow-up Question",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Tell me more about that\",\n  \"session_id\": \"{{sessionId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/chat/sync",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chat", "sync"]
+            },
+            "description": "Test conversation memory with follow-up"
+          }
+        },
+        {
+          "name": "Test Hallucination Prevention",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What is the capital of Mars?\",\n  \"session_id\": \"{{sessionId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/chat/sync",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chat", "sync"]
+            },
+            "description": "Should return 'I do not have knowledge...' response"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sessions",
+      "item": [
+        {
+          "name": "List Sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions"]
+            },
+            "description": "List all active session IDs"
+          }
+        },
+        {
+          "name": "Clear Session",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"{{sessionId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/session/clear",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "session", "clear"]
+            },
+            "description": "Clear conversation memory for a session"
+          }
+        },
+        {
+          "name": "Clear All Sessions",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/sessions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sessions"]
+            },
+            "description": "Clear all session memories"
+          }
+        }
+      ]
+    }
+  ]
+}
