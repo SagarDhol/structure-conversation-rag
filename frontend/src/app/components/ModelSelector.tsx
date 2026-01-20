@@ -11,7 +11,7 @@ interface ModelSelectorProps {
 }
 
 const MODELS: Record<string, string[]> = {
-    openai: ['gpt-4', 'gpt-4-turbo', 'gpt-3.5-turbo'],
+    openai: ['gpt-3.5-turbo'],
     ollama: ['llama3', 'llama3.1', 'mistral', 'mixtral'],
 };
 

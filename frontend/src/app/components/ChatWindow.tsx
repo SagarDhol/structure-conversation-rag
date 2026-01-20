@@ -20,7 +20,7 @@ export default function ChatWindow() {
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [provider, setProvider] = useState('openai');
-    const [model, setModel] = useState('gpt-4');
+    const [model, setModel] = useState('gpt-3.5-turbo');
     const [sessionId, setSessionId] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
 
